@@ -10,6 +10,7 @@
 |
 */
 //the view call from controller not from route but write it in route to explain
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -136,4 +137,22 @@ Auth::routes(['verify'=>true]);
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
 
-//route register
+//database learning
+route::group(['prefix'=>'offers'],function(){
+    //the first route that write in url browser and that call controller methode that call view form
+   route::get('insert','Global\DBLearning@callView') ;
+   //the route that form request direct on it
+   route::post('store','Global\DBLearning@store');
+});
+
+//mcamara learning
+//note that group that contain mcamara prefix and middleware must not inside another group as throw not found route
+//LaravelLocalization::setLocale() this code that get prefix if ar or en or any language
+//'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath'] this middleware that set ar prefix or en  when delete from url"make redirect"
+route::group(['prefix' => LaravelLocalization::setLocale(),'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]],function(){
+    route::group(['prefix'=>'offers'],function(){
+        route::get('insert','Global\DBLearning@callView');
+        route::post('store','Global\DBLearning@store');
+    }) ;
+});
+

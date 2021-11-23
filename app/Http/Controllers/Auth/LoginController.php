@@ -40,6 +40,13 @@ class LoginController extends Controller
     //override from AuthenticatesUsers trait
     public function username()
     {
-        return 'phone';
+        //will get value of identifier key
+        $identifier=request()->input('identifier');
+        //will check if $identifier is valid email if true set email else set phone
+        $status=filter_var($identifier,FILTER_VALIDATE_EMAIL)?'email':'phone';
+        //add email or phone as key and value of identifier in request array and add it to use it in check
+        request()->merge([$status=>$identifier]);
+        //return check by using email field or phone field
+        return $status;
     }
 }

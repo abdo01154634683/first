@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use SebastianBergmann\Environment\Console;
 
 class Kernel extends ConsoleKernel
 {
@@ -12,8 +13,10 @@ class Kernel extends ConsoleKernel
      *
      * @var array
      */
+    //import in it task schedulers
     protected $commands = [
-        //
+        \App\Console\Commands\Notify::class,
+        \App\Console\Commands\Expiration::class,
     ];
 
     /**
@@ -22,10 +25,17 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
+    //note that user:expire is the name that write in Expiration class
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->command('user:notify')
+            ->everyMinute();
+        $schedule->command('user:expire')
+            ->everyMinute();
+
+
     }
 
     /**

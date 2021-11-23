@@ -8,7 +8,7 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
-
+        <link rel = "stylesheet" href= "{{ url('css/styles.css')}}">
         <!-- Styles -->
         <style>
             html, body {
@@ -86,56 +86,69 @@
         </style>
     </head>
     <body>
+    <!--  navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                        <li class="nav-item active">
+                            <a class="nav-link"
+                               href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}"> {{ $properties['native'] }}
+                            </a>
+                        </li>
+
+                    @endforeach
+
+
+                </ul>
+            </div>
+        </nav>
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-
             <div class="content">
                 <div class="title m-b-md">
                    Add Offer
                 </div>
                 <div>
-                    <form method="POST" action="{{url('offer\store')}}">
+                    {{--
+                        check if session has key success in it if true mean that creation done
+                        note that session added in create method in DBLearning controller when creation added without error
+                    --}}
+                    @if(\Illuminate\Support\Facades\Session::has('success'))
+                        {{-- this div tag will display success message  that store in session by store function--}}
+                        <div>
+                            {{\Illuminate\Support\Facades\Session::get('success')}}
+                        </div>
+                    @endif
+                    {{--another ways to direct form on specific route with no mcamara package--}}
+                    {{--<form method='POST' action="{{route('offer.store')}}"> and name route the same name --}}
+                    {{--<form method='POST' action="{{url('offers/store')}}"> --}}
+                    {{-- this code  \LaravelLocalization::localizeURL('offers/store') make localization of action attribute--}}
+                    <form method="POST" action="{{ \LaravelLocalization::localizeURL('offers/store') }}">
                         @csrf
-                        <label> Id </label>
-                        <input type="text" name="id" >
-                        @error('id')
-                          <small>{{$message}}</small>
-                        @enderror
                         <label>Name</label>
-                        <input type="text" name="name">
-                        @error('name')
-                        <small>{{$message}}</small>
+                        <input type="text" name="offer_name">
+                        @error('offer_name')
+                        {{-- $message is variable that contain error and value in it depend on field that made in it error--}}
+                            <small > {{$message}}</small>{{--will show error message in this tag--}}
                         @enderror
                         <label>Price</label>
-                        <input type="text" name="price">
-                        @error('price')
-                        <small>{{$message}}</small>
+                        <input type="text" name="offer_price">
+                        @error('offer_price')
+                            <small > {{$message}}</small>{{--will show error message in this tag--}}
                         @enderror
                         <label>Details</label>
-                        <input type="text" name="details">
-                        @error('details')
-                        <small>{{$message}}</small>
+                        <input type="text" name="offer_details">
+                        @error('offer_details')
+                            <small >{{$message}}</small>{{--will show error message in this tag--}}
                         @enderror
                         <input type="submit" name="submit" value="store" class="submit">
                     </form>
-                    <div class="success">
-                        {{--message that send from with function in DatabaseLearning --}}
-                        @if(Session::has('message'))
-                            <h1>{{Session::get('message')}}</h1>
-                        @endif
-                    </div>
                 </div>
             </div>
         </div>

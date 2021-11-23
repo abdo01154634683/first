@@ -4,9 +4,11 @@ return [
     'abdo'=>'عبدو',
     'ahmed'=>'احمد',
     //database file multi-language errors
-    'id_unique'=>'رقم التعريف موجود ادخل رقم اخر',
-    'id_required'=>'رقم التعريف مطلوب',
-    'name_unique'=>'الاسم موجود',
-    'price_numeric'=>'العر ليس رقم',
-    'details_required'=>'التفاصيل مطلوبه'
+    'offer_name_required'=>'يجب ادخال الاسم',
+    'offer_name_unique'=>'الاسم يجب ان يكون وحيد',
+    'offer_name_max'=>'الاسم يجب ان يكون اقل من 11',
+    'offer_price_numeric'=>'السعر يجب ان يكون بالعربي',
+    'offer_price_required'=>'السعر يجب ادخاله',
+    'offer_details_required'=>'التفاصيل مطلوبه',
+    'success'=>'تم اضافة العرض بنجاح'
 ];
